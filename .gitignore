@@ -1,4 +1,7 @@
+# Environment Variables
 .env
 
+# Node.js modules and build dirs
 **/node_modules/
-facts-gpt/build/
+**/build/
+**/dist/

@@ -1,34 +1,38 @@
-const { Configuration, OpenAIApi } = require("openai");
+const dotenv = require('dotenv')
 const express = require('express')
-const bodyParser = require('body-parser')
 const cors = require('cors')
+const { Configuration, OpenAIApi } = require('openai')
 
+// Load environment variables from .env file into process.env
+dotenv.config()
+
+// OpenAI configuration
 const configuration = new Configuration({
-      apiKey: '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',
+    apiKey: process.env.OPENAI_KEY,
 })
 
 const app = express()
-app.use(bodyParser.json())
+
+// Json parser and CORS Middleware
+app.use(express.json())
 app.use(cors())
 
-const port = 3000
-
+// Post request from the client
 app.post('/', async (req, res) => {
-      const openai = new OpenAIApi(configuration)
+    const userPrompt = req.body.query
+    const openai = new OpenAIApi(configuration)
 
-      const completion = await openai.createCompletion({
-      model: "text-davinci-002",
-      prompt: "Who is the creator of Python?",
+    const completion = await openai.createCompletion({
+        model: 'text-davinci-002',
+        prompt: userPrompt,
+    })
+
+    console.log(completion.data) // TODO to remove
+
+    return res.json({ response: completion.data.choices[0].text })
 })
 
-console.log(completion.data)
-return res.send(completion.data)
-})
-
-// app.get('/models', async (req, res) => {
-//       res.send(getResponse())
-// });
-
-app.listen(port, () => {
-      console.log(`Example app listening at http://localhost:${port}`)
+const PORT = process.env.PORT || 8080
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`)
 })
