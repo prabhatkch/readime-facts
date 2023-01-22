@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const configuration = new Configuration({
-      apiKey: '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',
+      apiKey: 'PUT YOUR API KEY HERE',
 })
 
 const app = express()
